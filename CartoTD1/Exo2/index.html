@@ -12,10 +12,10 @@
 </body>
 <script src="jquery-3.6.0.js"></script>
 <script>
-    function monOrientation(event) {
-        $('#orientation').append("p").text("Alpha (z) : "+ event.alpha +".\n Beta (x) : "+ event.beta +".\n Gamma (y) : "+ event.gamma +".\n");
+    if(window.DeviceOrientationEvent) {
+        window.addEventListener("deviceorientation", function(event) {
+            $('#orientation').append("p").text("Alpha (z) : "+ event.alpha +".\n Beta (x) : "+ event.beta +".\n Gamma (y) : "+ event.gamma +".\n");
+        }, true);
     }
-
-    if(window.DeviceOrientationEvent) window.addEventListener("deviceorientation", monOrientation, false);
 </script>
 </html>
