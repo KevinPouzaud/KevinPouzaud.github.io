@@ -6,8 +6,12 @@
 </head>
 <body>
     <h1>Exercice 1</h1>
-	<div id="position">
-        <h2>Ma position lon, lat :</h2>
+	<div id="positionGet">
+        <h2>Ma position lon, lat, précision :</h2>
+    </div>
+    <div id="positionWatch">
+        <h2>Ma position long, lat, précision :</h2>
+        <p id="pos"></p>
     </div>
 </body>
 <script src="jquery-3.6.0.js"></script>
@@ -15,8 +19,17 @@
     function maPosition(position) {
         console.log("Longitude : " + position.coords.longitude);
         console.log("Latitude : " + position.coords.latitude);
-        $('#position').append("p").text("Longitude : "+ position.coords.longitude +".\n Latitude : "+ position.coords.latitude +".\n Précision : "+ position.coords.accuracy +".\n");
+        $('#positionGet').append("p").text("Longitude : "+ position.coords.longitude +".\n Latitude : "+ position.coords.latitude +".\n Précision : "+ position.coords.accuracy +".\n");
     }
+
+    function maPositionV2(position) {
+        console.log("Longitude : " + position.coords.longitude);
+        console.log("Latitude : " + position.coords.latitude);
+        $('#pos').text("Longitude : "+ position.coords.longitude +".\n Latitude : "+ position.coords.latitude +".\n Précision : "+ position.coords.accuracy +".\n");
+    }
+
     if(navigator.geolocation) navigator.geolocation.getCurrentPosition(maPosition);
+
+    if(navigator.geolocation) navigator.geolocation.watchPosition();
 </script>
 </html>
