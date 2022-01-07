@@ -19,13 +19,13 @@
     function maPosition(position) {
         console.log("Longitude : " + position.coords.longitude);
         console.log("Latitude : " + position.coords.latitude);
-        $('#positionGet').append("p").text("Longitude : "+ position.coords.longitude +".\n Latitude : "+ position.coords.latitude +".\n Précision : "+ position.coords.accuracy +".\n Speed : "+ geolocationCoordinatesInstance.speed +".\n");
+        $('#positionGet').append("p").text("Longitude : "+ position.coords.longitude +".\n Latitude : "+ position.coords.latitude +".\n Précision : "+ position.coords.accuracy +".\n Speed : "+ position.coords.speed +".\n");
     }
 
     function maPositionV2(position) {
         console.log("Longitude : " + position.coords.longitude);
         console.log("Latitude : " + position.coords.latitude);
-        $('#pos').text("Longitude : "+ position.coords.longitude +".\n Latitude : "+ position.coords.latitude +".\n Précision : "+ position.coords.accuracy +".\n Speed : "+ geolocationCoordinatesInstance.speed +".\n");
+        $('#pos').text("Longitude : "+ position.coords.longitude +".\n Latitude : "+ position.coords.latitude +".\n Précision : "+ position.coords.accuracy +".\n Speed : "+ position.coords.speed +".\n");
     }
 
     if(navigator.geolocation) navigator.geolocation.getCurrentPosition(maPosition);
