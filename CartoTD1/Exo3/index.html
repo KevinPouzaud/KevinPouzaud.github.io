@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Exercice 3</title>
+	<meta charset="utf-8"/>
+</head>
+<body>
+    <h1>Exercice 3</h1>
+	<div id="position">
+        <h2>Position du touch :</h2>
+    </div>
+</body>
+<script src="jquery-3.6.0.js"></script>
+<script>
+    document.addEventListener("touchstart", function(event) {
+        $('#position').append("<p>"+ "Pos X : " + event.touches[0].clientX + ". Pos Y : " + event.touches[0].clientY +".</p>");
+    }, false);
+</script>
+</html>
