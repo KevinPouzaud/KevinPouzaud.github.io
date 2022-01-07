@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Exercice 1</title>
+	<meta charset="utf-8"/>
+</head>
+<body>
+	<div id="position">
+        <h2>Ma position lon, lat</h2>
+    </div>
+</body>
+<script src="jquery-2.1.1.min.js"></script>
+<script>
+    function maPosition(position) {
+        $('#position').append('<p>Longitude : '+ position.coord.longitude +'</p>');
+        $('#position').append('<p>Longitude : '+ position.coord.latitude +'</p>');
+    }
+    if(navigator.geolocation) navigator.geolocation.getCurrentPosition(maPosition);
+</script>
+</html>
