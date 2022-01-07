@@ -19,13 +19,13 @@
     function maPosition(position) {
         console.log("Longitude : " + position.coords.longitude);
         console.log("Latitude : " + position.coords.latitude);
-        $('#positionGet').append("p").text("Longitude : "+ position.coords.longitude +".\n Latitude : "+ position.coords.latitude +".\n Précision : "+ position.coords.accuracy +".\n Speed : "+ position.coords.speed +".\n Timestamp : "+ position.coords.timestamp +".\n");
+        $('#positionGet').append("p").text("Longitude : "+ position.coords.longitude +".\n Latitude : "+ position.coords.latitude +".\n Précision : "+ position.coords.accuracy +".\n Speed : "+ position.coords.speed +".\n Timestamp : "+ position.timestamp +".\n");
     }
 
     function maPositionV2(position) {
         console.log("Longitude : " + position.coords.longitude);
         console.log("Latitude : " + position.coords.latitude);
-        $('#pos').text("Longitude : "+ position.coords.longitude +".\n Latitude : "+ position.coords.latitude +".\n Précision : "+ position.coords.accuracy +".\n Speed : "+ position.coords.speed +".\n Timestamp : "+ position.coords.timestamp +".\n");
+        $('#pos').text("Longitude : "+ position.coords.longitude +".\n Latitude : "+ position.coords.latitude +".\n Précision : "+ position.coords.accuracy +".\n Speed : "+ position.coords.speed +".\n Timestamp : "+ position.timestamp +".\n");
     }
 
     if(navigator.geolocation) navigator.geolocation.getCurrentPosition(maPosition);
