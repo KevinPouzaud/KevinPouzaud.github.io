@@ -15,8 +15,8 @@
     function maPosition(position) {
         console.log("Longitude : " + position.coords.longitude);
         console.log("Latitude : " + position.coords.latitude);
-        $('#position').append('<p>Longitude : '+ position.coords.longitude +'</p>');
-        $('#position').append('<p>Longitude : '+ position.coords.latitude +'</p>');
+        $('#position').append("p").text("Longitude : "+ position.coords.longitude +".");
+        $('#position').append("p").text("Latitude : "+ position.coords.latitude +".");
     }
     if(navigator.geolocation) navigator.geolocation.getCurrentPosition(maPosition);
 </script>
