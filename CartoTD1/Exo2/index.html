@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Exercice 2</title>
+	<meta charset="utf-8"/>
+</head>
+<body>
+    <h1>Exercice 2</h1>
+	<div id="orientation">
+        <h2>Orientation du smartphone :</h2>
+    </div>
+</body>
+<script src="jquery-3.6.0.js"></script>
+<script>
+    function monOrientation(event) {
+        $('#orientation').append("p").text("Alpha (z) : "+ event.alpha +".\n Beta (x) : "+ event.beta +".\n Gamma (y) : "+ event.gamma +".\n");
+    }
+
+    if(window.DeviceOrientationEvent) window.addEventListener("deviceorientation", monOrientation, false);
+</script>
+</html>
