@@ -18,7 +18,7 @@
 <script>
     if(window.DeviceOrientationEvent) {
         window.addEventListener("deviceorientation", function(event) {
-            $('#orientation').append("p").text("Alpha (z) : "+ event.alpha +".\n Beta (x) : "+ event.beta +".\n Gamma (y) : "+ event.gamma +".\n");
+            $('#orientation').append("<p>"+ "Alpha (z) : "+ event.alpha +".\n Beta (x) : "+ event.beta +".\n Gamma (y) : "+ event.gamma +".\n" +"</p>");
         }, true);
     }
 
