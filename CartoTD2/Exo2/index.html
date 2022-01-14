@@ -8,7 +8,7 @@
 <body>
     <h1>Exercice 2</h1>
 	<div id="positionGet">
-        <h2>Map :</h2>
+        <h2>Triangle des bermudes :</h2>
         <div id="map" style="height: 500px;"></div>
     </div>
 </body>
@@ -19,6 +19,7 @@
     function maPosition(position) {        
         var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], position.coords.accuracy);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+        L.marker([18.466, -66.118]).addTo(map).bindPopup('A pretty CSS3 popup.<br> Easily customizable.').openPopup();
         var polygon = L.polygon([[18.466, -66.118],[32.321, -64.757],[25.774, -80.19]], {color: 'red'}).addTo(map);
     }
     if(navigator.geolocation) navigator.geolocation.getCurrentPosition(maPosition);
