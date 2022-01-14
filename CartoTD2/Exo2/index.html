@@ -50,7 +50,7 @@
         var options = {units: 'kilometers'};
         var distance = turf.distance(from, to, options);
         alert("Distance entre ma position et Marseille : " + distance + " km.");
-        $("#dist").text(distance + "km.");
+        document.getElementById("dist").innerHTML(distance + "km.");
     }
     if(navigator.geolocation) navigator.geolocation.getCurrentPosition(maPosition);
 
