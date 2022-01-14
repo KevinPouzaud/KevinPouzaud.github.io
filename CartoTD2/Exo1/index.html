@@ -16,7 +16,7 @@
 <script src="../leaflet/leaflet.js"></script>
 <script>
     function maPosition(position) {        
-        var map = L.map('map').setView([position.coords.longitude, position.coords.latitude], position.coords.accuracy);
+        var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], position.coords.accuracy);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
         L.marker([position.coords.longitude, position.coords.latitude]).addTo(map).bindPopup('A pretty CSS3 popup.<br> Easily customizable.').openPopup();
     }
