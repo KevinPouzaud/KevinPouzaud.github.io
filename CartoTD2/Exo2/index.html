@@ -27,11 +27,18 @@
         var polygon = L.polygon([[18.466, -66.118],[32.321, -64.757],[25.774, -80.19]], {color: 'red'}).addTo(map);
 
         var layer = new L.StamenTileLayer("toner");
-        var map = new L.Map("map2", {
+        var map2 = new L.Map("map2", {
             center: new L.LatLng(position.coords.latitude, position.coords.longitude),
             zoom: position.coords.accuracy
         });
-        map.addLayer(layer);
+        map2.addLayer(layer);
+
+        var circle = L.circle([position.coords.latitude, position.coords.longitude], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: 500
+        }).addTo(map2);
     }
     if(navigator.geolocation) navigator.geolocation.getCurrentPosition(maPosition);
 
