@@ -51,6 +51,13 @@
         var distance = turf.distance(from, to, options);
         alert("Distance entre ma position et Marseille : " + distance + " km.");
         document.getElementById("dist").innerHTML = distance + "km.";
+
+        var line = new L.Polyline([[position.coords.latitude, position.coords.longitude], [43.2904103,5.3875931]], {
+            color: 'blue',
+            weight: 3,
+            opacity: 0.5,
+            smoothFactor: 1
+        }).addTo(map2);
     }
     if(navigator.geolocation) navigator.geolocation.getCurrentPosition(maPosition);
 
