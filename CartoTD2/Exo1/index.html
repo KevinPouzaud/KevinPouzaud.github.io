@@ -8,7 +8,7 @@
     <h1>Exercice 1</h1>
 	<div id="positionGet">
         <h2>Map :</h2>
-        <div id="map" style="height: 200px;"></div>
+        <div id="map" style="height: 180px;"></div>
     </div>
 </body>
 <script src="jquery-3.6.0.js"></script>
@@ -16,7 +16,7 @@
 <script src="../leaflet/leaflet.js"></script>
 <script>
     function maPosition(position) {        
-        var map = L.map('map').setView([position.coords.longitude, position.coords.latitude], 13);
+        var map = L.map('map').setView([position.coords.longitude, position.coords.latitude]);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
         L.marker([position.coords.longitude, position.coords.latitude]).addTo(map).bindPopup('A pretty CSS3 popup.<br> Easily customizable.').openPopup();
     }
