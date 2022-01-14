@@ -17,6 +17,7 @@
     </div>
     <div id="distance">
         <h2>Distance :</h2>
+        <h3 id="dist"></h3>
     </div>
 </body>
 <script src="jquery-3.6.0.js"></script>
@@ -49,7 +50,7 @@
         var options = {units: 'kilometers'};
         var distance = turf.distance(from, to, options);
         alert("Distance entre ma position et Marseille : " + distance + " km.");
-
+        $("#dist").text(distance + "km.");
     }
     if(navigator.geolocation) navigator.geolocation.getCurrentPosition(maPosition);
 
