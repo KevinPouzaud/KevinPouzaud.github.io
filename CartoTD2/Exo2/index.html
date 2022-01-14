@@ -25,12 +25,14 @@
 <script type="text/javascript" src="https://stamen-maps.a.ssl.fastly.net/js/tile.stamen.js?v1.3.0"></script>
 <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
 <script>
-    function maPosition(position) {        
+    function maPosition(position) { 
+        // Triangle des bermudes       
         var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], position.coords.accuracy);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
         L.marker([18.466, -66.118]).addTo(map).bindPopup('A pretty CSS3 popup.<br> Easily customizable.').openPopup();
         var polygon = L.polygon([[18.466, -66.118],[32.321, -64.757],[25.774, -80.19]], {color: 'red'}).addTo(map);
 
+        // Map avec Stamen
         var layer = new L.StamenTileLayer("toner");
         var map2 = new L.Map("map2", {
             center: new L.LatLng(position.coords.latitude, position.coords.longitude),
@@ -38,6 +40,7 @@
         });
         map2.addLayer(layer);
 
+        // Cercle rouge
         var circle = L.circle([position.coords.latitude, position.coords.longitude], {
             color: 'red',
             fillColor: '#f03',
@@ -45,14 +48,15 @@
             radius: position.coords.accuracy
         }).addTo(map2);
 
-        var from = turf.point([position.coords.latitude, position.coords.longitude]);
+        // Distance Marseille - Nice
+        var from = turf.point([43.6977423,7.2698294]);
         var to = turf.point([43.2904103,5.3875931]);
         var options = {units: 'kilometers'};
         var distance = turf.distance(from, to, options);
         alert("Distance entre ma position et Marseille : " + distance + " km.");
         document.getElementById("dist").innerHTML = distance + "km.";
 
-        var line = new L.Polyline([[position.coords.latitude, position.coords.longitude], [43.2904103,5.3875931]], {
+        var line = new L.Polyline([[43.6977423,7.2698294], [43.2904103,5.3875931]], {
             color: 'blue',
             weight: 3,
             opacity: 0.5,
