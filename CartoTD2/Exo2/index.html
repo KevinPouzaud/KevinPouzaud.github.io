@@ -29,7 +29,7 @@
         var layer = new L.StamenTileLayer("toner");
         var map2 = new L.Map("map2", {
             center: new L.LatLng(position.coords.latitude, position.coords.longitude),
-            zoom: position.coords.accuracy
+            zoom: 14
         });
         map2.addLayer(layer);
 
@@ -37,7 +37,7 @@
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 0.5,
-            radius: 500
+            radius: position.coords.accuracy
         }).addTo(map2);
     }
     if(navigator.geolocation) navigator.geolocation.getCurrentPosition(maPosition);
