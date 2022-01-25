@@ -12,7 +12,10 @@
 </body>
 <script>
     function draw() {
-        let ctx = document.getElementById('canvas').getContext('2d');
+        let canvas = document.getElementById('canvas');
+        canvas.setAttribute('width', 500);
+        canvas.setAttribute('height', 500);
+        let ctx = canvas.getContext('2d');
         ctx.drawImage(document.getElementById('paysage'), 0, 0);
     }
 </script>
