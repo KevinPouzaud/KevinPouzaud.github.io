@@ -6,12 +6,14 @@
 </head>
 <body>
     <canvas id="canvas"></canvas>
+    <div style="display: none;">
+        <img id="paysage" src="./res/paysage.jpg" width="500" height="500">
+    </div>
 </body>
 <script>
     function draw() {
         let ctx = document.getElementById('canvas').getContext('2d');
-        let img = new Image();
-        img.src = '/res/paysage.jpg';
+        ctx.drawImage(document.getElementById('paysage'), 0, 0);
     }
 </script>
 </html>
