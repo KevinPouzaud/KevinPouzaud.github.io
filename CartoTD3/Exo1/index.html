@@ -3,20 +3,72 @@
 <head>
 	<title>Exercice 1</title>
 	<meta charset="utf-8"/>
+    <style>
+        #door {
+            fill:rgb(104, 45, 0);
+        }
+        #door:hover {
+            fill: rgb(255, 0, 220);
+        }
+    </style>
 </head>
 <body onload="draw()">
     <canvas id="canvas"></canvas>
     <div style="display: none;">
-        <img id="paysage" src="./res/paysage.jpg" width="500" height="500">
+        <img id="paysage" src="./res/paysage.jpg" width="500" height="331">
+    </div>
+
+    <div>
+        <svg width="500" height="331">
+            <rect id="ciel" x="0" y="0" width="500" height="191" style="fill:rgb(0, 148, 255);"/>
+            <rect x="0" y="191" width="500" height="140" style="fill:rgb(0, 150, 0);"/>
+            <polygon points="0,191 140,191 70,50" style="fill:rgb(119, 57, 0);stroke:rgb(84, 40, 0);stroke-width:2;"/>
+            <polygon points="120,191 260,191 190,50" style="fill:rgb(119, 57, 0);stroke:rgb(84, 40, 0);stroke-width:2;"/>
+            <polygon points="240,191 380,191 310,50" style="fill:rgb(119, 57, 0);stroke:rgb(84, 40, 0);stroke-width:2;"/>
+            <polygon points="360,191 500,191 430,50" style="fill:rgb(119, 57, 0);stroke:rgb(84, 40, 0);stroke-width:2;"/>
+            <circle cx="420" cy="40" r="30" fill="rgb(255, 216, 0)" onclick="changeCiel()"/>
+            <rect x="50" y="180" width="100" height="120" style="fill:rgb(219, 95, 0);"/>
+            <rect id="door" x="60" y="220" width="40" height="80"/>
+            <polygon points="50,180 150,180 100,120" style="fill:rgb(255, 0, 0);"/>
+        </svg>
     </div>
 </body>
 <script>
     function draw() {
         let canvas = document.getElementById('canvas');
         canvas.setAttribute('width', 500);
-        canvas.setAttribute('height', 500);
+        canvas.setAttribute('height', 331);
         let ctx = canvas.getContext('2d');
-        ctx.drawImage(document.getElementById('paysage'), 0, 0);
+        ctx.drawImage(document.getElementById('paysage'), 15, 20);
+
+        var cercle = new Path2D();
+        cercle.moveTo(15, 15);
+        cercle.arc(50, 50, 25, 0, 2 * Math.PI);
+        ctx.fillStyle = '#FD0';
+        ctx.fill(cercle);
+
+        ctx.fillStyle = 'rgb(219, 95, 0)';
+        ctx.fillRect(300, 220, 76, 100);
+
+        ctx.fillStyle = 'rgb(104, 45, 0)';
+        ctx.fillRect(310, 270, 30, 50);
+
+        ctx.moveTo(300, 220);
+        ctx.lineTo(338, 180);
+        ctx.lineTo(376, 220);
+        ctx.lineWidth = 10;
+        ctx.fillStyle = 'rgb(255, 0, 0)';
+        ctx.fill();
+    }
+
+    function changeCiel() {
+        var ciel = document.getElementById('ciel');
+        if(ciel.style.fill == "rgb(0, 148, 255)") {
+            ciel.style.fill = "rgb(128, 128, 128)";
+        }
+        else {
+            ciel.style.fill = "rgb(0, 148, 255";
+        }
     }
 </script>
 </html>
