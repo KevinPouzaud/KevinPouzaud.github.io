@@ -8,9 +8,10 @@
     <canvas id="canvas"></canvas>
 </body>
 <script>
-    let ctx = document.getElementById('canvas').getContext('2d');
-    let img = new Image();
-    img.src = '/res/paysage.jpg';
-    ctx.drawImage(img, 0, 0);
+    function draw() {
+        let ctx = document.getElementById('canvas').getContext('2d');
+        let img = new Image();
+        img.src = '/res/paysage.jpg';
+    }
 </script>
 </html>
