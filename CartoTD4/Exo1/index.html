@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>TD4 - Exo1</title>
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="js/three.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+        var texture = new THREE.TextureLoader().load('img/earth4.jpg');
+        var geometry = new THREE.SphereGeometry(100, 32, 32);
+        const material = new THREE.MeshBasicMaterial({
+            map: texture
+        });
+        var sphere = new THREE.Mesh(geometry, material);
+        scene.add(sphere);
+
+        camera.position.z = 200;
+        var backgroundScene = new THREE.Scene();
+        var backgroundCamera = new THREE.Camera();
+        backgroundScene.add(backgroundCamera);
+
+        const light = new THREE.PointLight( 0xFF0000, 1.2, 50 );
+        scene.add(light);
+        
+        
+        var render = function () {
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
+        };
+
+        function convert(la, ln) {
+            var lat = la * Math.PI / 180;
+            var lng = -ln * Math.PI / 180;
+            var x = 100*Math.cos(lat)*Math.cos(lng);
+            var y = 100*Math.cos(lat)*Math.sin(lng);
+            var z = 100*Math.sin(lat);
+            var pointGeo = new THREE.SphereGeometry(1, 32, 32);
+            const pointMat = new THREE.MeshBasicMaterial({
+                color: 0xFF0000
+            });
+            var point = new THREE.Mesh(pointGeo, pointMat);
+            point.position.set(x, z, y);
+            scene.add(point);
+        }
+
+        function maPosition(position) {
+            convert(position.coords.latitude, position.coords.longitude);
+        }
+
+        if(navigator.geolocation) navigator.geolocation.getCurrentPosition(maPosition);
+
+        fetch("https://restcountries.com/v3.1/all")
+        .then(response => response.json())
+        .then(response => {
+            response.forEach(r => {
+                console.log(r.latlng);
+                var coo = JSON.stringify(r.latlng);
+                coo = JSON.parse(coo);
+                console.log(coo[0]);
+                console.log(coo[1]);
+                convert(coo[0], coo[1]);
+            
+            });
+        })
+        .catch(error => console.log("Erreur : " + error));
+
+        render();
+
+
+        /*
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+        var texture = new THREE.TextureLoader().load('img/earth4.jpg');
+        //const geometry = new THREE.BoxGeometry();
+        var geometry = new THREE.SphereGeometry(200, 1000, 1000, 0, Math.PI * 2, 0, Math.PI * 2);
+        const material = new THREE.MeshBasicMaterial({
+            map: texture
+        });
+        var sphere = new THREE.Mesh(geometry, material);
+        scene.add(sphere);
+        sphere.position.set(0,0,0);
+
+        camera.position.z = 900;
+        var backgroundScene = new THREE.Scene();
+        var backgroundCamera = new THREE.Camera();
+        backgroundScene.add(backgroundCamera);
+
+        const light = new THREE.PointLight( 0xFF0000, 1.2, 50 );
+        scene.add(light);
+        
+        
+        var render = function () {
+            requestAnimationFrame(render);
+
+            //sphere.rotation.y += 0.005;
+
+            renderer.render(scene, camera);
+        };
+
+        function convert() {
+
+        }
+
+        render();
+        /*
+        function animate() {
+            requestAnimationFrame(animate);
+
+            sphere.rotation.x += 0.01;
+            sphere.rotation.y += 0.01;
+
+            renderer.render(scene, camera);
+        };
+
+        animate();*/
+    </script>
+</body>
+
+</html>
