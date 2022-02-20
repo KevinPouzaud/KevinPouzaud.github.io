@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Projet Kevin Pouzaud - Carto/Géo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="res/leaflet/leaflet.css" />
+</head>
+
+<body>
+    <nav>
+        <div id="zone_titre">
+            <h1 id="title">Projet Carto-Géo</h1>
+            <h3 id="subTitle">Espace carte</h3>
+        </div>
+        <div id="zone_recherche">
+            <input id="searchbar" onkeyup="search_animal()" type="text" name="search"
+                placeholder="Chercher une capitale">
+            <ul id="list">
+                <li class="capitale">One</li>
+                <li class="capitale">Two</li>
+                <li class="capitale">Three</li>
+            </ul>
+        </div>
+        <div id="zone_nav">
+            <ul id="nav">
+                <li id="carteButton" class="puce">Carte</li>
+                <li id="dessinButton" class="puce">Dessin</li>
+                <li id="gitButton" class="puce"><a href="https://kevinpouzaud.github.io/" target="_blank">Github</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="carte">
+        <div id="mapDiv"></div>
+        <div id="earthDiv">
+            <canvas id="earthCanvas"></canvas>
+        </div>
+        <div class="actual-pos"></div>
+        <div class="marker-position"></div>
+        <div class="distance"></div>
+    </div>
+    <div id="dessin">
+        <h1>COUCOU DESSIN</h1>
+    </div>
+</body>
+<script src="res/jquery-3.6.0.js"></script>
+<script src="res/leaflet/leaflet.js"></script>
+<script type="text/javascript" src="https://stamen-maps.a.ssl.fastly.net/js/tile.stamen.js?v1.3.0"></script>
+<script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+<script src="https://threejs.org/build/three.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://threejs.org/examples/js/loaders/GLTFLoader.js"></script>
+<script type="text/javascript">
+    $('#dessin').hide();
+    document.getElementById("carteButton").addEventListener('click', event => {
+        $('#dessin').hide();
+        $('#carte').show();
+        $('#subTitle').text("Espace carte");
+    })
+    document.getElementById("dessinButton").addEventListener('click', event => {
+        $('#carte').hide();
+        $('#dessin').show();
+        $('#subTitle').text("Espace dessin");
+    })
+
+    var latitude;
+    var longitude;
+    var accuracy;
+    var map = new L.Map("mapDiv", {
+        center: new L.LatLng(0, 0),
+        zoom: 12
+    });
+    function maPosition(position) {
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+        accuracy = position.coords.accuracy;
+        map.setView(new L.LatLng(latitude, longitude, 8));
+        var circle = L.circle([latitude, longitude], {
+            color: 'blue',
+            radius: accuracy
+        }).addTo(map).bindPopup("Vous êtes approximativement à " + accuracy + " mètres de ce point").openPopup();
+        const currentPos = document.querySelector(".actual-pos");
+        currentPos.textContent = 'Position actuelle : Latitude="' + latitude + '" et Longitude="' + longitude + '"';
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(maPosition);
+    }
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var polygon = L.polygon([
+        [32.259265, -64.857788],
+        [25.777634, -80.183716],
+        [18.448347, -66.104736]
+    ], { color: 'red', fillColor: '#f03' }).addTo(map).bindPopup('Triangle des Bermudes');
+
+    /*
+    var lat, lng;
+    map.on('contextmenu', function (event) {
+        L.marker(event.latlng).addTo(map);
+    });*/
+
+    map.on("click", addMarker);
+
+    var oldMarker = undefined;
+    var oldLine = undefined;
+    function addMarker(e) {
+        const markerPlace = document.querySelector(".marker-position");
+        markerPlace.textContent = 'Marker ajouté : Latitude="' + e.latlng.lat + '" et Longitude="' + e.latlng.lng + '"';
+
+        const marker = new L.marker(e.latlng, {
+            draggable: true
+        })
+            .addTo(map)
+            .bindPopup(buttonRemove);
+
+        const line = new L.Polyline([[latitude, longitude], [e.latlng.lat, e.latlng.lng]], {
+            color: 'red',
+            weight: 3,
+            opacity: 0.8,
+            smoothFactor: 1
+        }).addTo(map);
+
+        marker.on("popupopen", removeMarker);
+
+        marker.on("dragend", dragedMarker);
+        if (oldMarker != undefined) {
+            map.removeLayer(oldMarker);
+            map.removeLayer(oldLine);
+            oldMarker = marker;
+            oldLine = line;
+        }
+        else {
+            oldMarker = marker;
+            oldLine = line;
+        }
+
+        var from = turf.point([latitude, longitude]);
+        var to = turf.point([e.latlng.lat, e.latlng.lng]);
+        var options = { units: 'kilometers' };
+        var distance = turf.distance(from, to, options);
+        const dist = document.querySelector(".distance");
+        dist.textContent = 'Distance entre votre position et le marker : "' + distance + '"km';
+    }
+
+    const buttonRemove = '<button type="button" class="remove">Supprimer ce marker ?</button>';
+
+    function removeMarker() {
+        const marker = this;
+        const btn = document.querySelector(".remove");
+        btn.addEventListener("click", function () {
+            const markerPlace = document.querySelector(".marker-position");
+            markerPlace.textContent = "Marker supprimé !";
+            map.removeLayer(marker);
+        });
+    }
+
+    function dragedMarker() {
+        const markerPlace = document.querySelector(".marker-position");
+        markerPlace.textContent = 'Marker modifié : Latitude="' + this.getLatLng().lat + '" et Longitude="' + this.getLatLng().lng + '"';
+
+        var from = turf.point([latitude, longitude]);
+        var to = turf.point([this.getLatLng().lat, this.getLatLng().lng]);
+        var options = { units: 'kilometers' };
+        var distance = turf.distance(from, to, options);
+        const dist = document.querySelector(".distance");
+        dist.textContent = 'Distance entre votre position et le marker : "' + distance + '"km';
+
+        const line = new L.Polyline([[latitude, longitude], [this.getLatLng().lat, this.getLatLng().lng]], {
+            color: 'red',
+            weight: 3,
+            opacity: 0.8,
+            smoothFactor: 1
+        }).addTo(map);
+        map.removeLayer(oldLine);
+        oldLine = line;
+    }
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(25, 1, 0.1, 1000);
+    camera.position.z = 6;
+
+    const renderer = new THREE.WebGLRenderer({ canvas: earthCanvas });
+
+    renderer.setSize(800, 800);
+    
+
+    const light = new THREE.AmbientLight(0xffffff);
+    scene.add(light);
+
+    const geometry = new THREE.SphereGeometry(1, 32, 32);
+    const texture = new THREE.TextureLoader().load('./res/earth_texture.jpg');
+    const materialTex = new THREE.MeshBasicMaterial({ map: texture });
+    const t = new THREE.Mesh(geometry, materialTex);
+
+    const geometryPos1 = new THREE.CylinderGeometry(5, 5, 35, 64);
+    const materialPos1 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    const pos1 = new THREE.Mesh( geometryPos1, materialPos1 );
+    var pos1Coords = _convertLatLonToVec3(latitude, longitude);
+    pos1.position.x = pos1Coords.x;
+    pos1.position.y = pos1Coords.y;
+    pos1.position.z = pos1Coords.z;
+
+    scene.add(t);
+    scene.add(pos1);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+    var countries = new THREE.Group();
+    $.get({
+        url: 'https://restcountries.com/v3.1/all',
+        success: function (data) {
+            data.forEach((item, i) => {
+
+                var posPays = _convertLatLonToVec3(item['latlng'][0], item['latlng'][1]);
+                var geometryC = new THREE.SphereGeometry(0.01, 32, 32);
+                var textureC = new THREE.TextureLoader().load(item.flags.svg);
+                var materialC = new THREE.MeshBasicMaterial({ map: textureC });
+                var pays = new THREE.Mesh(geometryC, materialC);
+
+                pays.position.x = posPays.x;
+                pays.position.y = posPays.y;
+                pays.position.z = posPays.z;
+
+                countries.add(pays);
+            });
+        }
+    });
+    scene.add(countries);
+
+    const animate = function () {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    };
+    animate();
+
+    function _convertLatLonToVec3(lat, lon) {
+        lat = lat * Math.PI / 180.0;
+        lon = -lon * Math.PI / 180.0;
+        return new THREE.Vector3(
+            Math.cos(lat) * Math.cos(lon),
+            Math.sin(lat),
+            Math.cos(lat) * Math.sin(lon));
+    }
+</script>
+
+</html>

@@ -1,0 +1,146 @@
+html {
+    height: 95%;
+}
+
+body {
+    height: 100%;
+    display: flex;
+}
+
+nav {
+    background-color: darkslategray;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 15px;
+    width: 15%;
+    height: 100%;
+    display: block;
+}
+
+#zone_titre {
+    text-align: center;
+    color: #7FC9FF;
+}
+
+#title {
+    font-size: 2.3em;
+}
+
+#subTitle {
+    text-align: left;
+    text-decoration: underline;
+}
+
+#zone_recherche {
+    
+}
+
+#searchbar{
+    padding:15px;
+    border-radius: 10px;
+    background-color: #5B9999;
+}
+
+input::placeholder {
+    color: black;
+}
+
+input[type=text] {
+    width: 50%;
+    -webkit-transition: width 0.15s ease-in-out;
+    transition: width 0.15s ease-in-out;
+}
+
+input[type=text]:focus {
+    width: 70%;
+}
+
+#list {
+    font-size:  1.3em;
+    background-color: #5B9999;
+}
+
+.capitale {
+    display: list-item;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    line-height: 30px;
+}
+
+.capitale:hover {
+    background-color: #7FC9FF;
+}
+
+#zone_nav {
+
+}
+
+#nav {
+    list-style-type: none;
+    padding-inline-start: 0px;
+}
+
+.puce {
+    background-color: #5B9999;
+    vertical-align: middle;
+    margin: 10px;
+    line-height: 30px;
+    text-align: center;
+}
+
+.puce:hover {
+    background-color: #7FC9FF;
+}
+
+#gitButton > a {
+    text-decoration: none;
+    width: 100px;
+}
+
+#gitButton > a:visited {
+    color: black;
+}
+
+#carte {
+    width: 85%;
+    padding-left: 15px;
+    margin-left: 15px;
+}
+
+#dessin {
+    width: 85%;
+    padding-left: 15px;
+    margin-left: 15px;
+    height: 100%;
+}
+
+#mapDiv {
+    height: 800px;
+    width: 49%;
+    float: left;
+    margin-right: 3px;
+}
+
+#earthDiv {
+    height: 800px;
+    width: 49%;
+    float: left;
+    margin-left: 3px;
+}
+
+#earthCanvas {
+    height: 100%;
+    width: 100%;
+}
+
+.actual-pos {
+    margin-top: 5px;
+}
+
+.marker-position {
+    margin-top: 5px;
+}
+
+.distance {
+    margin-top: 5px;
+}
