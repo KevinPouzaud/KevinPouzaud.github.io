@@ -16,7 +16,7 @@
         </div>
         <div id="zone_recherche">
             <input id="searchbar" onkeyup="search_country()" type="text" name="search"
-                placeholder="Chercher une capitale">
+                placeholder="Chercher un pays">
             <ul id="list">
                 
             </ul>
@@ -24,7 +24,6 @@
         <div id="zone_nav">
             <ul id="nav">
                 <li id="carteButton" class="puce">Carte</li>
-                <li id="dessinButton" class="puce">Dessin</li>
                 <li id="gitButton" class="puce"><a href="https://kevinpouzaud.github.io/" target="_blank">Github</a>
                 </li>
             </ul>
@@ -57,12 +56,6 @@
         $('#carte').show();
         $('#zone_recherche').show();
         $('#subTitle').text("Espace carte");
-    })
-    document.getElementById("dessinButton").addEventListener('click', event => {
-        $('#carte').hide();
-        $('#zone_recherche').hide();
-        $('#dessin').show();
-        $('#subTitle').text("Espace dessin");
     })
 
     var latitude;
