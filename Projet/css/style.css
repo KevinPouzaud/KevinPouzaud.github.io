@@ -58,6 +58,9 @@ input[type=text]:focus {
 #list {
     font-size:  1.3em;
     background-color: #5B9999;
+    height: 200px;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 .capitale {

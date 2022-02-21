@@ -15,12 +15,10 @@
             <h3 id="subTitle">Espace carte</h3>
         </div>
         <div id="zone_recherche">
-            <input id="searchbar" onkeyup="search_animal()" type="text" name="search"
+            <input id="searchbar" onkeyup="search_country()" type="text" name="search"
                 placeholder="Chercher une capitale">
             <ul id="list">
-                <li class="capitale">One</li>
-                <li class="capitale">Two</li>
-                <li class="capitale">Three</li>
+                
             </ul>
         </div>
         <div id="zone_nav">
@@ -68,6 +66,7 @@
     var latitude;
     var longitude;
     var accuracy;
+    var listCountry = [];
     var map = new L.Map("mapDiv", {
         center: new L.LatLng(0, 0),
         zoom: 12
@@ -109,6 +108,7 @@
 
     var oldMarker = undefined;
     var oldLine = undefined;
+    var oldPoint = undefined;
     function addMarker(e) {
         const markerPlace = document.querySelector(".marker-position");
         markerPlace.textContent = 'Marker ajouté : Latitude="' + e.latlng.lat + '" et Longitude="' + e.latlng.lng + '"';
@@ -126,18 +126,30 @@
             smoothFactor: 1
         }).addTo(map);
 
+        var geometry3 = new THREE.ConeGeometry(0.02, 0.3, 32);
+        var material3 = new THREE.MeshBasicMaterial({ color: 'red' });
+        var t3 = new THREE.Mesh(geometry3, material3);
+        const posT3 = _convertLatLonToVec3(e.latlng.lat, e.latlng.lng);
+        t3.position.set(posT3.x, posT3.y, posT3.z);
+        const center = new THREE.Vector3(t.position.x, t.position.y + 1.5, t.position.z);
+        t3.lookAt(0, 1.5, 0);
+        scene.add(t3);
+
         marker.on("popupopen", removeMarker);
 
         marker.on("dragend", dragedMarker);
         if (oldMarker != undefined) {
             map.removeLayer(oldMarker);
             map.removeLayer(oldLine);
+            scene.remove(oldPoint);
             oldMarker = marker;
             oldLine = line;
+            oldPoint = t3;
         }
         else {
             oldMarker = marker;
             oldLine = line;
+            oldPoint = t3;
         }
 
         var from = turf.point([latitude, longitude]);
@@ -157,6 +169,8 @@
             const markerPlace = document.querySelector(".marker-position");
             markerPlace.textContent = "Marker supprimé !";
             map.removeLayer(marker);
+            map.removeLayer(oldLine);
+            scene.remove(oldPoint);
         });
     }
 
@@ -179,6 +193,17 @@
         }).addTo(map);
         map.removeLayer(oldLine);
         oldLine = line;
+
+        var geometry4 = new THREE.ConeGeometry(0.02, 0.3, 32);
+        var material4 = new THREE.MeshBasicMaterial({ color: 'red' });
+        var t4 = new THREE.Mesh(geometry4, material4);
+        const posT4 = _convertLatLonToVec3(this.getLatLng().lat, this.getLatLng().lng);
+        t4.position.set(posT4.x, posT4.y, posT4.z);
+        const center = new THREE.Vector3(t.position.x, t.position.y + 1.5, t.position.z);
+        t4.lookAt(0, 1.5, 0);
+        scene.add(t4);
+        scene.remove(oldPoint);
+        oldPoint = t4;
     }
 
     const scene = new THREE.Scene();
@@ -197,24 +222,27 @@
     const texture = new THREE.TextureLoader().load('./res/earth_texture.jpg');
     const materialTex = new THREE.MeshBasicMaterial({ map: texture });
     const t = new THREE.Mesh(geometry, materialTex);
-
-    const geometryPos1 = new THREE.CylinderGeometry(5, 5, 35, 64);
-    const materialPos1 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-    const pos1 = new THREE.Mesh( geometryPos1, materialPos1 );
-    var pos1Coords = _convertLatLonToVec3(latitude, longitude);
-    pos1.position.x = pos1Coords.x;
-    pos1.position.y = pos1Coords.y;
-    pos1.position.z = pos1Coords.z;
-
     scene.add(t);
-    scene.add(pos1);
 
+    navigator.geolocation.getCurrentPosition(function(position) {
+        var geometry2 = new THREE.ConeGeometry(0.02, 0.3, 32);
+        var material2 = new THREE.MeshBasicMaterial({ color: 'blue' });
+        var t2 = new THREE.Mesh(geometry2, material2);
+        const posT2 = _convertLatLonToVec3(position.coords.latitude, position.coords.longitude);
+        t2.position.set(posT2.x, posT2.y, posT2.z);
+        console.log(t.position);
+        const center = new THREE.Vector3(t.position.x, t.position.y + 1.5, t.position.z);
+        t2.lookAt(center);
+        scene.add(t2);
+    });
+    
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
     var countries = new THREE.Group();
     $.get({
         url: 'https://restcountries.com/v3.1/all',
         success: function (data) {
+            console.log(data);
             data.forEach((item, i) => {
 
                 var posPays = _convertLatLonToVec3(item['latlng'][0], item['latlng'][1]);
@@ -228,7 +256,16 @@
                 pays.position.z = posPays.z;
 
                 countries.add(pays);
+
+                var country = {
+                    name: item.name.common,
+                    lat: item.latlng[0],
+                    lng: item.latlng[1]
+                }
+                listCountry.push(country);
             });
+            console.log(listCountry);
+            createCountryList();
         }
     });
     scene.add(countries);
@@ -246,6 +283,41 @@
             Math.cos(lat) * Math.cos(lon),
             Math.sin(lat),
             Math.cos(lat) * Math.sin(lon));
+    }
+
+    function createCountryList() {
+        listCountry.forEach((country) => {
+            $('#list').append('<li class="capitale" data-lat="' + country.lat + '" data-lng="' + country.lng + '">' + country.name + '</li>');
+        })
+        const l = document.getElementById('list');
+        l.addEventListener('click', pointToMap, false);
+    }
+
+    function pointToMap(event) {
+        var latClick = parseFloat(event.target.dataset.lat);
+        var lngClick = parseFloat(event.target.dataset.lng);
+        var subObj = {
+            lat: latClick,
+            lng: lngClick
+        }
+        var obj = {
+            latlng: subObj
+        }
+        addMarker(obj);
+    }
+
+    function search_country() {
+        let input = document.getElementById('searchbar').value;
+        input = input.toLowerCase();
+        let x = document.getElementsByClassName('capitale');
+        for(i = 0; i < x.length; i++) {
+            if(!x[i].innerHTML.toLowerCase().includes(input)) {
+                x[i].style.display = 'none';
+            }
+            else {
+                x[i].style.display = 'list-item';
+            }
+        }
     }
 </script>
 
