@@ -55,10 +55,12 @@
     document.getElementById("carteButton").addEventListener('click', event => {
         $('#dessin').hide();
         $('#carte').show();
+        $('#zone_recherche').show();
         $('#subTitle').text("Espace carte");
     })
     document.getElementById("dessinButton").addEventListener('click', event => {
         $('#carte').hide();
+        $('#zone_recherche').hide();
         $('#dessin').show();
         $('#subTitle').text("Espace dessin");
     })
@@ -230,7 +232,6 @@
         var t2 = new THREE.Mesh(geometry2, material2);
         const posT2 = _convertLatLonToVec3(position.coords.latitude, position.coords.longitude);
         t2.position.set(posT2.x, posT2.y, posT2.z);
-        console.log(t.position);
         const center = new THREE.Vector3(t.position.x, t.position.y + 1.5, t.position.z);
         t2.lookAt(center);
         scene.add(t2);
@@ -242,7 +243,6 @@
     $.get({
         url: 'https://restcountries.com/v3.1/all',
         success: function (data) {
-            console.log(data);
             data.forEach((item, i) => {
 
                 var posPays = _convertLatLonToVec3(item['latlng'][0], item['latlng'][1]);
@@ -264,7 +264,6 @@
                 }
                 listCountry.push(country);
             });
-            console.log(listCountry);
             createCountryList();
         }
     });
